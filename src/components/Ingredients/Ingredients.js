@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import IngredientForm from './IngredientForm';
 import IngredientList from './IngredientList';
@@ -6,6 +6,7 @@ import Search from './Search';
 
 const Ingredients = () => {
   const [userIngredients, setUserIngredients] = useState([]);
+  console.log(userIngredients);
   useEffect(() => {
     fetch(
       'https://udemy-react-hook-85f9f-default-rtdb.firebaseio.com/ingredients.json'
@@ -22,6 +23,14 @@ const Ingredients = () => {
         }
         setUserIngredients(loadedIngredients);
       });
+  }, []);
+
+  useEffect(() => {
+    console.log('RENDERING', userIngredients);
+  });
+
+  const filteredIngredientsHandler = useCallback((filteredIngredients) => {
+    setUserIngredients(filteredIngredients);
   }, []);
 
   const addIngredientHandler = (ingredient) => {
@@ -55,7 +64,7 @@ const Ingredients = () => {
       <IngredientForm onAddIngredient={addIngredientHandler} />
 
       <section>
-        <Search />
+        <Search onLoadIngredients={filteredIngredientsHandler} />
         <IngredientList
           ingredients={userIngredients}
           onRemoveItem={removeIngredientHandler}
