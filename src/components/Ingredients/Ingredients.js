@@ -21,7 +21,7 @@ const ingredientReducer = (currentIngredients, action) => {
 
 const Ingredients = () => {
   const [userIngredients, dispatch] = useReducer(ingredientReducer, []);
-  const { isLoading, error, data, sendRequest, reqExtra, reqIdentifer } =
+  const { isLoading, error, data, sendRequest, reqExtra, reqIdentifer, clear } =
     useHttp();
 
   // const [userIngredients, setUserIngredients] = useState([]);
@@ -46,7 +46,7 @@ const Ingredients = () => {
 
   const addIngredientHandler = useCallback((ingredient) => {
     sendRequest(
-      'https://udemy-react-hook-85f9f-default-rtdb.firebaseio.com/',
+      'https://udemy-react-hook-85f9f-default-rtdb.firebaseio.com/ingredient.json',
       'POST',
       JSON.stringify(ingredient),
       ingredient,
@@ -87,10 +87,6 @@ const Ingredients = () => {
     [sendRequest]
   );
 
-  const clearError = useCallback(() => {
-    // dispatchHttp({ type: 'CLEAR' });
-  }, []);
-
   const ingredientList = useMemo(() => {
     return (
       <IngredientList
@@ -102,7 +98,7 @@ const Ingredients = () => {
 
   return (
     <div className='App'>
-      {error && <ErrorModal onClose={clearError}>{error}</ErrorModal>}
+      {error && <ErrorModal onClose={clear}>{error}</ErrorModal>}
 
       <IngredientForm
         onAddIngredient={addIngredientHandler}
